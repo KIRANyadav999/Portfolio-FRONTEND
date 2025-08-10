@@ -21,7 +21,7 @@ export default function Contact() {
     e.preventDefault();
     setError("");
     try {
-      const res = await fetch("http://localhost:3005/api/contact", {
+      const res = await fetch("https://portfolio-backend-1z8g.onrender.com/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
