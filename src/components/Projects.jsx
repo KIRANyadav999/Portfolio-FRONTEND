@@ -21,7 +21,7 @@ const projects = [
   {
     title: "Library Management System",
     image: libraryImage,
-    techStack: ["Java", "SQL", "OOPS"],
+    techStack: ["Java", "SQL", "OOPS", "CRUD Operations"],
     link: "https://github.com/KIRANyadav999",
   },
   {
