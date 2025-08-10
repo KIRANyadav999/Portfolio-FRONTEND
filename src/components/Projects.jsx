@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import chatImage from "../assets/images/projects/chat.png";
 import efaImage from "../assets/images/projects/efa.png";
 import tourImage from "../assets/images/projects/tour.png";
@@ -45,13 +45,21 @@ export default function Projects() {
 
   const totalPages = Math.ceil(projects.length / PROJECTS_PER_PAGE);
 
+  // Auto-advance every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentPage((prev) => (prev + 1) % totalPages);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [totalPages]);
+
   const goToPage = (page) => {
     if (page < 0) page = totalPages - 1;
     else if (page >= totalPages) page = 0;
     setCurrentPage(page);
   };
 
-  // Slice projects to show only current page's projects
   const visibleProjects = projects.slice(
     currentPage * PROJECTS_PER_PAGE,
     currentPage * PROJECTS_PER_PAGE + PROJECTS_PER_PAGE
@@ -64,20 +72,18 @@ export default function Projects() {
     >
       <h2 className="text-5xl font-extrabold mb-12 text-center">Projects</h2>
 
-      {/* Carousel Container */}
       <div className="relative max-w-6xl mx-auto">
-        {/* Projects Grid */}
         <div className="flex justify-center gap-8">
           {visibleProjects.map((project, idx) => (
             <div
               key={idx}
-              className="min-w-[280px] max-w-[320px] p-[2px] rounded-xl bg-gradient-to-r from-pink-500 via-orange-400 to-yellow-400 shadow-lg overflow-visible"
+              className="min-w-[280px] max-w-[320px] p-[2px] rounded-xl bg-gradient-to-r from-pink-500/50 via-orange-400/50 to-yellow-400/50 shadow-lg overflow-visible"
             >
-              <div className="bg-gray-900 rounded-xl overflow-hidden flex-shrink-0 transition-transform duration-300 hover:scale-105 hover:rotate-1">
+              <div className="bg-gray-900 bg-opacity-60 rounded-xl overflow-hidden flex-shrink-0">
                 <img
                   src={project.image}
                   alt={project.title}
-                  className="w-full h-48 object-cover grayscale-0 hover:grayscale-0 transition duration-500"
+                  className="w-full h-48 object-cover grayscale-0 transition duration-500"
                 />
                 <div className="p-6 flex flex-col flex-grow">
                   <h3 className="text-xl font-semibold mb-2 text-white">
@@ -87,7 +93,7 @@ export default function Projects() {
                     {project.techStack.map((tech, i) => (
                       <span
                         key={i}
-                        className="bg-gray-800 text-gray-300 rounded-full px-3 py-1 text-sm font-medium"
+                        className="bg-gray-800 bg-opacity-50 text-gray-300 rounded-full px-3 py-1 text-sm font-medium"
                       >
                         {tech}
                       </span>
@@ -97,7 +103,7 @@ export default function Projects() {
                     href={project.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-auto inline-block bg-white text-black px-4 py-2 rounded-lg font-semibold hover:bg-gray-200 transition"
+                    className="mt-auto inline-block bg-white bg-opacity-80 text-black px-4 py-2 rounded-lg font-semibold hover:bg-opacity-100 transition"
                   >
                     View Project
                   </a>
@@ -107,25 +113,22 @@ export default function Projects() {
           ))}
         </div>
 
-        {/* Left Arrow */}
         <button
           onClick={() => goToPage(currentPage - 1)}
           aria-label="Previous Projects"
-          className="absolute left-0 top-1/2 -translate-y-1/2 bg-gray-700 bg-opacity-70 hover:bg-opacity-90 text-white rounded-full p-3 shadow-lg focus:outline-none"
+          className="absolute left-0 top-1/2 -translate-y-1/2 bg-gray-700 bg-opacity-50 hover:bg-opacity-70 text-white rounded-full p-3 shadow-lg focus:outline-none"
         >
           &#8592;
         </button>
 
-        {/* Right Arrow */}
         <button
           onClick={() => goToPage(currentPage + 1)}
           aria-label="Next Projects"
-          className="absolute right-0 top-1/2 -translate-y-1/2 bg-gray-700 bg-opacity-70 hover:bg-opacity-90 text-white rounded-full p-3 shadow-lg focus:outline-none"
+          className="absolute right-0 top-1/2 -translate-y-1/2 bg-gray-700 bg-opacity-50 hover:bg-opacity-70 text-white rounded-full p-3 shadow-lg focus:outline-none"
         >
           &#8594;
         </button>
 
-        {/* Dots Pagination */}
         <div className="flex justify-center gap-3 mt-8">
           {Array.from({ length: totalPages }).map((_, i) => (
             <button
